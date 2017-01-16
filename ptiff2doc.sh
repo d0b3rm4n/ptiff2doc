@@ -21,6 +21,14 @@
 #      - is there a better way to set the pdfinfo?
 #
 
+cleanup () {
+    if [[ -n $TEMP_DIR ]] ; then
+        rm -rf $TEMP_DIR
+    fi
+}
+
+trap cleanup EXIT
+
 usage() {
     cat <<EOF
 
@@ -177,6 +185,7 @@ if [[ $WANT_PDF -gt 0 ]]; then
 fi
 
 cd ${WORK_DIR}
-rm -rf ${TEMP_DIR}
+
+# clean up is done by EXIT trap
 
 # vim:set softtabstop=4 shiftwidth=4 tabstop=4 expandtab:
