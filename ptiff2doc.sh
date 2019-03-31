@@ -162,7 +162,7 @@ fi
 
 if [[ $WANT_DJVU -gt 0 ]]; then
     echo "Create djvu document ..."
-    parallel tifftopnm {} '>' ${TEMP_DIR}/{/.}.pnm ';' c44 -dpi ${DPI} ${TEMP_DIR}/{/.}.pnm ${TEMP_DIR}/{/.}.djvu ';' rm -rf ${TEMP_DIR}/{/.}.pnm ::: ${TEMP_DIR}/*.tif
+    parallel tifftopnm -byrow {} '>' ${TEMP_DIR}/{/.}.pnm ';' c44 -dpi ${DPI} ${TEMP_DIR}/{/.}.pnm ${TEMP_DIR}/{/.}.djvu ';' rm -rf ${TEMP_DIR}/{/.}.pnm ::: ${TEMP_DIR}/*.tif
     parallel ${SCRIPT_DIR}/hocr2djvutxt.pl {} ::: ${TEMP_DIR}/*.hocr
     parallel djvused {} -e "'select 1 ; set-txt ${TEMP_DIR}/{/.}.hocr.djvutxt_file'" -s ::: ${TEMP_DIR}/*.djvu
     djvm -create ${WORK_DIR}/${DOC_BASENAME}.djvu  ${TEMP_DIR}/*.djvu
