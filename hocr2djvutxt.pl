@@ -22,6 +22,8 @@ use Log::Log4perl qw(:easy);
 use Gscan2pdf::Page;
 use File::Slurp;
 use File::Temp qw/ tempdir /;
+use File::Basename;
+my $dirname = dirname(__FILE__);
 
 Log::Log4perl->easy_init($ERROR);
 $logger = Log::Log4perl::get_logger();
@@ -29,19 +31,16 @@ $logger = Log::Log4perl::get_logger();
 Gscan2pdf::Page->set_logger($logger);
 
 my $hocr_file = $ARGV[0];
-my $dummy_file = $ARGV[0].".dummy";
+my $dummy_file = $dirname . "/dummy.tif";
 my $djvutxt_file = $ARGV[0].".djvutxt_file";
 
 my $tmpdir = tempdir('hocr2djvutxt.XXXXXXXXX', CLEANUP => 1);
 
-open(DUMMY_FILE, ">", $dummy_file);
-close(DUMMY_FILE);
-
 my $gs_page = Gscan2pdf::Page->new(
     filename => $dummy_file,
     dir      => $tmpdir,
-    delete   => FALSE,
-    format   => 'tif',
+    delete   => 0,
+    format   => 'Tagged Image File Format',
 );
 
 $gs_page->{hocr} = read_file($hocr_file);
