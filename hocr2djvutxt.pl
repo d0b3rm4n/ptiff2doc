@@ -43,10 +43,11 @@ my $gs_page = Gscan2pdf::Page->new(
     format   => 'Tagged Image File Format',
 );
 
-$gs_page->{hocr} = read_file($hocr_file);
+$hocr = read_file($hocr_file);
+$gs_page->import_hocr($hocr);
 
 open(DJVUTXT, ">", $djvutxt_file);
-print DJVUTXT $gs_page->djvu_text();
+print DJVUTXT $gs_page->export_djvu_txt();
 close(DJVUTXT);
 
 # vim:set softtabstop=4 shiftwidth=4 tabstop=4 expandtab:
