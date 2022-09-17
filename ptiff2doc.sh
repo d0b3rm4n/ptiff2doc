@@ -21,6 +21,11 @@
 #      - is there a better way to set the pdfinfo?
 #
 
+
+# https://github.com/tesseract-ocr/tesseract/issues/898#issuecomment-315202167
+# https://unix.stackexchange.com/questions/530818/tesseract-high-cpu-usage-and-slow-speed-only-when-running-multiple-processes-i
+export OMP_THREAD_LIMIT=1
+
 cleanup () {
     if [[ -n $TEMP_DIR ]] ; then
         rm -rf $TEMP_DIR
@@ -157,7 +162,7 @@ cd ${TEMPDIR}
 if [[ $WANT_DJVU -gt 0 || $WANT_PDF -gt 0 ]]; then
     echo "Run ocr on images ..."
     parallel tiffcp {},0 ${TEMP_DIR}/{/} ::: ${TIFF_DIR}/*.tif
-    parallel tesseract {} ${TEMP_DIR}/{/.} -l ${TESS_LANG} -c tessedit_create_hocr=${WANT_DJVU} -c tessedit_create_pdf=${WANT_PDF} ::: ${TEMP_DIR}/*.tif
+    parallel tesseract {} ${TEMP_DIR}/{/.} -l ${TESS_LANG} --dpi 300 -c tessedit_create_hocr=${WANT_DJVU} -c tessedit_create_pdf=${WANT_PDF} ::: ${TEMP_DIR}/*.tif
 fi
 
 if [[ $WANT_DJVU -gt 0 ]]; then
